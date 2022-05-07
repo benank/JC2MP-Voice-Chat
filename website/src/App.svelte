@@ -83,18 +83,18 @@
             localStorage.setItem(LOCALSTORE_VOICE_CODE_NAME, voice_code_input);
         }
     }
-    
+
     const clickConnectOrDisconnect = () => {
         if ($connectionState == CONNECTION_STATE.CONNECTED) {
             clickDisconnectFromVoice();
         } else if ($connectionState == CONNECTION_STATE.NOT_CONNECTED) {
             clickConnectToVoice();
         }
-    }
-    
+    };
+
     const clickDisconnectFromVoice = () => {
         disconnectedHandler();
-    }
+    };
 
     const clickConnectToVoice = async () => {
         if (!has_mic_access) {
@@ -162,16 +162,17 @@
     </p>
     <p class="left">
         Instructions:<br /> <br />
-        1. Connect to Panau Survival on Just Cause 2 Multiplayer.<br />
-        2. Type <code>/voice</code> in chat. This will bring up the Voice Chat
+        1. Click to Allow Mic Access below.<br />
+        2. Select the microphone you want to use. If you change it, you will need
+        to reconnect.<br />
+        3. Connect to Panau Survival on Just Cause 2 Multiplayer.<br />
+        4. Type <code>/voice</code> in chat. This will bring up the Voice Chat
         Menu.<br />
-        3. Copy your Voice Code from the box.
+        5. Copy your Voice Code from the box.
         <b>DO NOT SHARE THIS WITH ANYONE.</b><br />
-        4. Paste your Voice Code below.<br />
-        5. Click Connect.<br />
-        6. Once you are connected, you will need to allow access to your microphone.<br
-        />
-        7. Now you will be able to talk with nearby players.<br />
+        6. Paste your Voice Code below.<br />
+        7. Click Connect.<br />
+        8. Now you will be able to talk with nearby players.<br />
     </p>
     <div class="two-col">
         <div class="mic-container">
