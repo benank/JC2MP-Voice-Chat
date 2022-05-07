@@ -16,7 +16,7 @@ class Voice {
     connectToPeerService() {
         this.peer = new Peer(null, {
             host: '/',
-            port: 8880,
+            port: 2083,
             path: '/voice',
             debug: 1,
         });
