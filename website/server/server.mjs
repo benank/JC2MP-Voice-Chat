@@ -1,5 +1,6 @@
+const PROD = process.env.NODE_ENV == 'production';
 const PEER_PORT = 8880;
-const EXPRESS_PORT = process.env.NODE_ENV == 'production' ? 8080 : 3001;
+const EXPRESS_PORT = PROD ? 8080 : 3001;
 const JCMP_PORT = 4002;
 
 import dgram from 'dgram';
@@ -36,6 +37,12 @@ import { PeerServer } from 'peer';
 const peerServer = PeerServer({
     port: PEER_PORT,
     path: '/voice',
+    ssl: PROD
+        ? {
+              key: fs.readFileSync(path.resolve(path.dirname(''), 'private.key')),
+              cert: fs.readFileSync(path.resolve(path.dirname(''), 'origin.crt')),
+          }
+        : null,
     // allow_discovery: true, // Do not allow discovery because we will send all ids
 });
 console.log(`Peer server listening on port ${PEER_PORT}...`);
