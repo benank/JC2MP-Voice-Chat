@@ -38,6 +38,7 @@ const peerServer = PeerServer({
     path: '/voice',
     // allow_discovery: true, // Do not allow discovery because we will send all ids
 });
+console.log(`Peer server listening on port ${PEER_PORT}...`);
 
 peerServer.on('error', (error) => {
     console.log(`Error:`);
