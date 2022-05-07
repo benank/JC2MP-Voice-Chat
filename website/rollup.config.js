@@ -10,7 +10,7 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
 	input: 'src/main.js',
 	output: {
-		sourcemap: true,
+		sourcemap: !production,
 		format: 'iife',
 		name: 'app',
 		file: 'public/build/bundle.js'
@@ -35,7 +35,9 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
+		commonjs({
+			sourceMap: !production
+		}),
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production

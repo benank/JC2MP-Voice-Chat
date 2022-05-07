@@ -39,13 +39,18 @@ const peerServer = PeerServer({
     // allow_discovery: true, // Do not allow discovery because we will send all ids
 });
 
+peerServer.on('error', (error) => {
+    console.log(`Error:`);
+    console.log(error);
+});
+
 peerServer.on('connection', (client) => {
     console.log('connection ' + client.getId());
 });
 
 peerServer.on('disconnect', (client) => {
     console.log('disconnect ' + client.getId());
-    
+
     const player = jcmp.getPlayerByPeerId(client.getId());
     if (typeof player != 'undefined') {
         jcmp.removePlayerByPeerId(player.peer_id);
@@ -86,14 +91,16 @@ app.post('/players', (req, res, next) => {
         res.status(200).end();
         return;
     }
-    
+
     const player = jcmp.getPlayerByPeerId(peer_id);
     if (!player) {
         res.status(200).end();
         return;
     }
-    
-    res.status(200).send({players: jcmp.getSyncData(player)}).end();
+
+    res.status(200)
+        .send({ players: jcmp.getSyncData(player) })
+        .end();
 });
 
 app.get('*', (req, res) => {
