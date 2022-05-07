@@ -54,7 +54,7 @@ class JCMP {
         // Remove players that are not included in the latest data
         Object.entries(this.players).forEach(([steamID, player]) => {
             if (typeof players[steamID] == 'undefined') {
-                this.removePlayer(steamID);
+                this.removePlayerBySteamID(steamID);
             }
         });
 
@@ -75,10 +75,19 @@ class JCMP {
         this.players[player.steamID] = player;
     }
 
-    removePlayer(steamID) {
+    removePlayerBySteamID(steamID) {
         if (this.players[steamID]) {
             delete this.players[steamID];
         }
+    }
+
+    removePlayerByPeerId(peerId) {
+        Object.entries(this.players).forEach(([steamID, player]) => {
+            if (player.peer_id == peerId && peerId != null) {
+                delete this.players[steamID];
+                return;
+            }
+        });
     }
 }
 

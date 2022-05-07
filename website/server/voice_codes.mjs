@@ -11,7 +11,7 @@ export const UserConnect = async (req, res, next) => {
 
     const steamID = await db.getSteamIdFromVoiceCode(voice_code);
 
-    if (!steamID) {
+    if (typeof steamID == 'undefined') {
         res.status(200).send({ success: false }).end();
         return;
     }
@@ -20,8 +20,9 @@ export const UserConnect = async (req, res, next) => {
 
     // Update peer_id on player
     const player = jcmp.players[steamID];
-    if (!player) {
+    if (typeof player == 'undefined') {
         res.status(200).send({ success: false }).end();
+        return;
     }
 
     player.peer_id = peer_id;

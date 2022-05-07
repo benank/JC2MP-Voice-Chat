@@ -15,3 +15,6 @@ export const CONNECTION_STATE_DATA = {
         color: 'rgba(0, 255, 0, 0.75)',
     },
 };
+
+// Player volume goes down over this distance
+export const MAX_PLAYER_DISTANCE = 50;

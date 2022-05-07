@@ -14,6 +14,7 @@
         CONNECTION_STATE,
     } from './Constants';
     import { startPlayerUpdateLoop } from './players';
+    import { disconnectedHandler } from './handlers';
 
     let has_mic_access = false;
     let voice_code_input = '';
@@ -92,11 +93,16 @@
     }
     
     const clickDisconnectFromVoice = () => {
-        // TODO: disconnect
+        disconnectedHandler();
     }
 
     const clickConnectToVoice = async () => {
         if (!has_mic_access) {
+            console.error('Cannot connect; no microphone access');
+            return;
+        }
+
+        if (!Voice.is_ready_to_call()) {
             console.error('Cannot connect; no microphone access');
             return;
         }
@@ -111,6 +117,7 @@
             return;
         }
 
+        $connectionState = CONNECTION_STATE.CONNECTING;
         fetch('/connect', {
             method: 'post',
             headers: {
@@ -128,17 +135,18 @@
                 response = await response.json();
 
                 if (response.success) {
-                    $connectionState = CONNECTION_STATE.CONNECTING;
+                    $connectionState = CONNECTION_STATE.CONNECTED;
                     // WE'RE IN, NOW CONNECT TO ALL PEERS
                     startPlayerUpdateLoop();
+                } else {
+                    disconnectedHandler();
                 }
             })
             .catch((err) => {
                 console.error(err);
+                disconnectedHandler();
             });
     };
-
-    // https://github.com/peers/peerjs
 </script>
 
 <main>

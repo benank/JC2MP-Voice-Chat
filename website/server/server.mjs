@@ -39,20 +39,16 @@ const peerServer = PeerServer({
     // allow_discovery: true, // Do not allow discovery because we will send all ids
 });
 
-const clients = {};
-
 peerServer.on('connection', (client) => {
     console.log('connection ' + client.getId());
-    clients[client.getId()] = client;
 });
 
 peerServer.on('disconnect', (client) => {
     console.log('disconnect ' + client.getId());
-    delete clients[client.getId()];
     
     const player = jcmp.getPlayerByPeerId(client.getId());
-    if (player) {
-        jcmp.removePlayer(player);
+    if (typeof player != 'undefined') {
+        jcmp.removePlayerByPeerId(player.peer_id);
     }
 });
 

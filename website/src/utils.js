@@ -7,13 +7,14 @@ export const HasMicAccess = async () => {
     });
 };
 
-export const RequestMicAccess = async (deviceId) => {
+export const RequestMicAccess = async (device) => {
+    const audio_config = device
+        ? { deviceId: { exact: device.deviceId } }
+        : true;
     return new Promise(async (resolve, reject) => {
         navigator.mediaDevices
             .getUserMedia({
-                audio: {
-                    exact: deviceId
-                },
+                audio: audio_config,
                 video: false,
             })
             .then(function (stream) {
@@ -38,4 +39,10 @@ export const GetAllAudioDevices = async () => {
                 console.log(err.name + ': ' + err.message);
             });
     });
+};
+
+export const distance = (a, b) => {
+    return Math.sqrt(
+        Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2)
+    );
 };

@@ -1,11 +1,19 @@
 import Voice from './Voice';
 import { connectionState } from './stores';
 import { CONNECTION_STATE } from './Constants';
+import { get } from "svelte/store";
+import { disconnectedHandler } from './handlers';
 
-export let players = {};
+export let allNearbyPlayers = {};
 
 export const startPlayerUpdateLoop = async () => {
-    setInterval(() => {
+    let interval;
+    interval = setInterval(() => {
+        if (get(connectionState) != CONNECTION_STATE.CONNECTED) {
+            clearInterval(interval);
+            return;
+        }
+        
         fetch('/players', {
             method: 'post',
             headers: {
@@ -21,16 +29,14 @@ export const startPlayerUpdateLoop = async () => {
             .then(async (response) => {
                 response = await response.json();
                 if (response.players) {
-                    players = response.players;
-                    Voice.playersUpdated(players);
-
-                    if (Object.keys(response.players).length >= 1) {
-                        connectionState.set(CONNECTION_STATE.CONNECTED);
-                    }
+                    allNearbyPlayers = response.players;
+                    Voice.playersUpdated(allNearbyPlayers);
                 }
             })
             .catch((err) => {
-                console.error(err);
+                allNearbyPlayers = {};
+                Voice.playersUpdated(allNearbyPlayers);
+                disconnectedHandler();
             });
     }, 1000);
 };

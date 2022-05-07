@@ -15,7 +15,7 @@ npm install
 ...then start [Rollup](https://rollupjs.org):
 
 ```bash
-npm run dev
+npm run start-dev
 ```
 
 Navigate to [localhost:3001](http://localhost:3001). You should see your app running. All changes are hot-reloaded.
