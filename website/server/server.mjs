@@ -1,4 +1,4 @@
-const PEER_PORT = 9000;
+const PEER_PORT = 8880;
 const EXPRESS_PORT = process.env.NODE_ENV == 'production' ? 8080 : 3001;
 const JCMP_PORT = 4002;
 
