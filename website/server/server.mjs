@@ -1,5 +1,5 @@
 const PEER_PORT = 9000;
-const EXPRESS_PORT = process.env.NODE_ENV == 'production' ? 80 : 3001;
+const EXPRESS_PORT = process.env.NODE_ENV == 'production' ? 8080 : 3001;
 const JCMP_PORT = 4002;
 
 import dgram from 'dgram';
