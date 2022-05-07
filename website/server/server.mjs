@@ -33,6 +33,7 @@ sock.on('message', async function (msg, rinfo) {
     }
 });
 
+import fs from 'fs';
 import { PeerServer } from 'peer';
 const peerServer = PeerServer({
     port: PEER_PORT,
