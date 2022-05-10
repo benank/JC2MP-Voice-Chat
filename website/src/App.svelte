@@ -1,15 +1,17 @@
 <script>
     import { onMount } from 'svelte';
+    import RangeSlider from 'svelte-range-slider-pips';
     import Voice from './Voice';
     import {
         HasMicAccess,
         RequestMicAccess,
         GetAllAudioDevices,
     } from './utils';
-    import { selectedAudioDevice, connectionState, voiceStore } from './stores';
+    import { selectedAudioDevice, connectionState, voiceVolume } from './stores';
     import {
         LOCALSTORE_MIC_PREF_NAME,
         LOCALSTORE_VOICE_CODE_NAME,
+        LOCALSTORE_VOLUME_NAME,
         CONNECTION_STATE_DATA,
         CONNECTION_STATE,
     } from './Constants';
@@ -19,8 +21,7 @@
     let has_mic_access = false;
     let voice_code_input = '';
     let mounted = false;
-
-    // Read ID from localstorage
+    let volumeSetting = [1];
 
     onMount(async () => {
         has_mic_access = await HasMicAccess();
@@ -32,9 +33,22 @@
             voice_code_input = stored_voice_code;
         }
 
+        const stored_volume = localStorage.getItem(
+            LOCALSTORE_VOLUME_NAME
+        );
+        if (stored_volume) {
+            volumeSetting[0] = stored_volume;
+            onVolumeChanged();
+        }
+
         mounted = true;
     });
-
+    
+    const onVolumeChanged = () => {
+        localStorage.setItem(LOCALSTORE_VOLUME_NAME, volumeSetting[0]);
+        $voiceVolume = volumeSetting[0];
+    }
+    
     let audioDevices = [];
     const RefreshAudioDevices = async () => {
         audioDevices = await GetAllAudioDevices();
@@ -162,7 +176,8 @@
     </p>
     <p class="left">
         Instructions:<br /> <br />
-        1. Click Allow Mic Access below to allow access to your microphone.<br />
+        1. Click Allow Mic Access below to allow access to your microphone.<br
+        />
         2. Select the microphone you want to use. If you change it, you will need
         to reconnect below.<br />
         3. Connect to Panau Survival on Just Cause 2 Multiplayer.<br />
@@ -218,6 +233,19 @@
                 {:else}
                     Connect
                 {/if}
+            </div>
+
+            <div class="slider-container">
+                Volume
+                <RangeSlider
+                    bind:values={volumeSetting}
+                    on:change={() => onVolumeChanged()}
+                    springValues={{ stiffness: 1, damping: 1 }}
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    float
+                />
             </div>
         </div>
     </div>
@@ -335,6 +363,15 @@
     div.mic-container div.audio-device.selected {
         background-color: rgba(0, 255, 0, 0.5);
         font-weight: bold;
+    }
+
+    div.slider-container {
+        width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+
+        --range-handle: #e7a983; /* non-focussed handle color */
+        --range-handle-focus: #d45640; /* focussed handle color */
     }
 
     @media (min-width: 640px) {

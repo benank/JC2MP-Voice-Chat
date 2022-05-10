@@ -5,7 +5,13 @@ class Player {
     constructor(args) {
         this.steamID = args.steamID;
         this.position = args.pos;
+        this.vehicle_id = args.v_id;
         this.peer_id = null;
+    }
+
+    update(player_data) {
+        this.position = player_data.pos;
+        this.vehicle_id = player_data.v_id;
     }
 
     /**
@@ -20,6 +26,7 @@ class Player {
             id: this.peer_id,
             position: this.position,
             me: player.steamID == this.steamID,
+            v_id: this.vehicle_id,
         };
     }
 }
@@ -66,7 +73,7 @@ class JCMP {
             }
 
             const player = this.players[steamID];
-            player.position = player_data.pos;
+            player.update(player_data);
         });
     }
 

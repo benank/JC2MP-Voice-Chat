@@ -38,5 +38,5 @@ export const startPlayerUpdateLoop = async () => {
                 Voice.playersUpdated(allNearbyPlayers);
                 disconnectedHandler();
             });
-    }, 1000);
+    }, 500);
 };

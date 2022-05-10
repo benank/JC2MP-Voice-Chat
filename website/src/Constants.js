@@ -1,5 +1,6 @@
 export const LOCALSTORE_MIC_PREF_NAME = 'SelectedMicrophone';
 export const LOCALSTORE_VOICE_CODE_NAME = 'VoiceCode';
+export const LOCALSTORE_VOLUME_NAME = 'VoiceVolume';
 
 export const CONNECTION_STATE = {
     NOT_CONNECTED: 1,
@@ -17,4 +18,4 @@ export const CONNECTION_STATE_DATA = {
 };
 
 // Player volume goes down over this distance
-export const MAX_PLAYER_DISTANCE = 50;
+export const MAX_PLAYER_DISTANCE = 60;

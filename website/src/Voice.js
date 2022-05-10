@@ -1,7 +1,8 @@
 import { MAX_PLAYER_DISTANCE } from './Constants';
-import { voiceStore } from './stores';
+import { voiceStore, voiceVolume } from './stores';
 import { distance, RequestMicAccess } from './utils';
 import { disconnectedHandler } from './handlers';
+import { get } from 'svelte/store';
 
 class Voice {
     constructor() {
@@ -12,7 +13,7 @@ class Voice {
         this.calls = {};
         this.microphone_stream = null;
     }
-    
+
     connectToPeerService() {
         this.peer = new Peer(null, {
             host: '/',
@@ -39,12 +40,12 @@ class Voice {
             this.updateStore();
         });
     }
-    
+
     disconnectFromPeerService() {
         if (!this.is_connected) {
             return;
         }
-        
+
         this.is_connected = false;
         this.peer.destroy();
         setTimeout(() => {
@@ -54,6 +55,7 @@ class Voice {
 
     playersUpdated(players) {
         const my_player_data = players[this.peer_id];
+        this.audio_volume_modifier = get(voiceVolume);
 
         // Remove players that are not included in the latest data
         Object.entries(this.call_audio).forEach(([peerId, audio]) => {
@@ -84,9 +86,18 @@ class Voice {
         ) {
             return 0;
         }
+        
+        // Both players are in the same vehicle
+        if (
+            typeof playerData.v_id != 'undefined' &&
+            typeof myPlayerData.v_id != 'undefined' &&
+            playerData.v_id === myPlayerData.v_id
+        ) {
+            return 1 * this.audio_volume_modifier;
+        }
 
         const dist = distance(playerData.position, myPlayerData.position);
-        return Math.max(0, 1 - dist / MAX_PLAYER_DISTANCE);
+        return Math.max(0, 1 - dist / MAX_PLAYER_DISTANCE) * this.audio_volume_modifier;
     }
 
     updateStore() {
