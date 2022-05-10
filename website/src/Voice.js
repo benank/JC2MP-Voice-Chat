@@ -70,6 +70,7 @@ class Voice {
                     player,
                     my_player_data
                 );
+                this.call_audio[player.id].muted = player.muted == true;
             }
         });
 

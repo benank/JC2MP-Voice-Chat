@@ -28,13 +28,17 @@ function sVoice:TransmitPlayerData()
 
     for p in Server:GetPlayers() do
         local position = p:GetPosition()
+        if p:InVehicle() then
+            position = p:GetVehicle():GetPosition()
+        end
+        
         player_data[tostring(p:GetSteamId())] = {
             pos = {
                 x = position.x,
                 y = position.y,
                 z = position.z
             },
-            muted = p:GetValue("Voice/Muted") or false
+            muted = p:GetValue("Voice/Muted") == true or p:GetValue("Loading") == true
         }
     end
     

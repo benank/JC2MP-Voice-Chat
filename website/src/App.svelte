@@ -162,9 +162,9 @@
     </p>
     <p class="left">
         Instructions:<br /> <br />
-        1. Click to Allow Mic Access below.<br />
+        1. Click Allow Mic Access below to allow access to your microphone.<br />
         2. Select the microphone you want to use. If you change it, you will need
-        to reconnect.<br />
+        to reconnect below.<br />
         3. Connect to Panau Survival on Just Cause 2 Multiplayer.<br />
         4. Type <code>/voice</code> in chat. This will bring up the Voice Chat
         Menu.<br />
