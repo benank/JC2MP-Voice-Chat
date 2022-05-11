@@ -86,7 +86,7 @@ class Voice {
         ) {
             return 0;
         }
-        
+
         // Both players are in the same vehicle
         if (
             typeof playerData.v_id != 'undefined' &&
@@ -97,7 +97,10 @@ class Voice {
         }
 
         const dist = distance(playerData.position, myPlayerData.position);
-        return Math.max(0, 1 - dist / MAX_PLAYER_DISTANCE) * this.audio_volume_modifier;
+        return (
+            Math.max(0, 1 - dist / MAX_PLAYER_DISTANCE) *
+            this.audio_volume_modifier
+        );
     }
 
     updateStore() {
@@ -193,8 +196,17 @@ class Voice {
         this.microphone_stream = stream;
     }
 
+    stop_mic_stream() {
+        if (this.microphone_stream != null) {
+            this.microphone_stream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+        }
+    }
+
     async audio_device_changed(device) {
         if (device) {
+            this.stop_mic_stream();
             const stream = await RequestMicAccess(device);
             this.set_audio_stream(stream);
             disconnectedHandler();

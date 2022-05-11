@@ -17,6 +17,7 @@
     } from './Constants';
     import { startPlayerUpdateLoop } from './players';
     import { disconnectedHandler } from './handlers';
+    import { PlayConnectSound, PlayDisconnectSound } from './Sounds';
 
     let has_mic_access = false;
     let voice_code_input = '';
@@ -161,6 +162,17 @@
                 disconnectedHandler();
             });
     };
+    
+    let prevConnectionState = $connectionState;
+    $: {
+        if ($connectionState == CONNECTION_STATE.CONNECTED) {
+            PlayConnectSound();
+        } else if ($connectionState == CONNECTION_STATE.NOT_CONNECTED && prevConnectionState == CONNECTION_STATE.CONNECTED) {
+            PlayDisconnectSound();
+        }
+        prevConnectionState = $connectionState
+    }
+    
 </script>
 
 <main>

@@ -1,7 +1,7 @@
 class 'cVoice'
 
 function cVoice:__init()
-    self.voice_code = ""
+    self.voice_code = "asdfasdf"
     self.press_timer = Timer()
     self:CreateWindow()
     Events:Subscribe("LocalPlayerChat", self, self.LocalPlayerChat)
@@ -10,7 +10,8 @@ end
 
 function cVoice:GetVoiceCode(args)
     self.voice_code = args.voice_code
-    self.vc_input:SetText(self.voice_code)
+    self.vc_input:SetText("")
+    self.vc_input:InsertText(self.voice_code)
 end
 
 function cVoice:ShowWindow()
