@@ -385,6 +385,10 @@
         --range-handle: #e7a983; /* non-focussed handle color */
         --range-handle-focus: #d45640; /* focussed handle color */
     }
+    
+    p {
+        line-height: 1.5em;
+    }
 
     @media (min-width: 640px) {
         main {
