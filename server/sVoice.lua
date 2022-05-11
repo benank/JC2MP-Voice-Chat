@@ -8,6 +8,25 @@ function sVoice:__init()
     self:StartTransmitLoop()
 
     Events:Subscribe("ClientModuleLoad", self, self.ClientModuleLoad)
+    Network:Subscribe("Voice/GetNew", self, self.GetNewVoiceCode)
+end
+
+function sVoice:GetNewVoiceCode(args, player)
+    local voice_code = self:GenerateNewVoiceCode()
+    local steamID = tostring(player:GetSteamId())
+    
+    -- Delete old voice code, if it exists
+    local cmd = SQL:Command("DELETE FROM voice WHERE steamID = (?)")
+    cmd:Bind(1, steamID)
+    cmd:Execute()
+    
+    -- Add new voice code
+    local command = SQL:Command("INSERT INTO voice (steamID, voice_code) VALUES (?, ?)")
+    command:Bind(1, steamID)
+    command:Bind(2, voice_code)
+    command:Execute()
+    
+    Network:Send(player, "Voice/VoiceCode", {voice_code = voice_code})
 end
 
 function sVoice:StartTransmitLoop()
@@ -67,9 +86,8 @@ function sVoice:ClientModuleLoad(args)
     else
         voice_code = result[1].voice_code
     end
-
-    -- Send to player, display in menu
-    print("Voice code " .. voice_code)
+    
+    Network:Send(args.player, "Voice/VoiceCode", {voice_code = voice_code})
 end
 
 function sVoice:RandomString(length)
