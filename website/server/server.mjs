@@ -54,11 +54,11 @@ peerServer.on('error', (error) => {
 });
 
 peerServer.on('connection', (client) => {
-    console.log('connection ' + client.getId());
+    // console.log('connection ' + client.getId());
 });
 
 peerServer.on('disconnect', (client) => {
-    console.log('disconnect ' + client.getId());
+    // console.log('disconnect ' + client.getId());
 
     const player = jcmp.getPlayerByPeerId(client.getId());
     if (typeof player != 'undefined') {
