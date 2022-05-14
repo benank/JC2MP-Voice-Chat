@@ -37,7 +37,12 @@ class Voice {
 
         this.peer.on('close', () => {
             disconnectedHandler();
+            this.peer.destroy();
             this.updateStore();
+        });
+        
+        this.peer.on('error', (err) => {
+            console.err(err)
         });
     }
 
@@ -66,6 +71,7 @@ class Voice {
 
         Object.values(players).forEach((player) => {
             if (!this.call_audio[player.id]) {
+                console.log(`call id ${player.id}`)
                 this.call(player.id);
             } else {
                 this.call_audio[player.id].volume = this.getAudioVolume(
@@ -126,24 +132,27 @@ class Voice {
     }
 
     removePeer(peerId) {
-        if (this.call_audio[peerId]) {
+        // Do not close connection or remove srcObject because
+        // it does not reconnect after closing :(
+        if (typeof this.call_audio[peerId] != 'undefined') {
             this.call_audio[peerId].muted = true;
-            this.call_audio[peerId].srcObject = null;
-            this.call_audio[peerId].remove();
-            delete this.call_audio[peerId];
+            this.call_audio[peerId].volume = 0;
+            // this.call_audio[peerId].srcObject = null;
+            // this.call_audio[peerId].remove();
+            // delete this.call_audio[peerId];
         }
 
-        if (this.calls[peerId]) {
-            this.calls[peerId].close();
-            delete this.call_audio[peerId];
-        }
+        // if (typeof this.calls[peerId] != 'undefined') {
+        //     this.calls[peerId].close();
+        //     delete this.call_audio[peerId];
+        // }
     }
 
     call(peerId) {
         if (
-            this.call_audio[peerId] ||
+            typeof this.call_audio[peerId] != 'undefined' ||
             peerId == this.peer_id ||
-            this.calls[peerId]
+            typeof this.calls[peerId] != 'undefined'
         ) {
             return;
         }
@@ -157,6 +166,7 @@ class Voice {
             this.removePeer(peerId);
         });
         call.on('error', () => {
+            console.error(err);
             this.removePeer(peerId);
         });
 
@@ -182,7 +192,8 @@ class Voice {
             call.on('close', () => {
                 this.removePeer(peerId);
             });
-            call.on('close', () => {
+            call.on('error', (err) => {
+                console.error(err);
                 this.removePeer(peerId);
             });
         });
