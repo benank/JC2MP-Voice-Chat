@@ -42,7 +42,7 @@ class Voice {
         });
         
         this.peer.on('error', (err) => {
-            console.err(err)
+            console.error(err)
         });
     }
 
