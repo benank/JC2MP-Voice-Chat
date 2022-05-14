@@ -29,3 +29,17 @@ npm run build
 ```
 
 You can run the newly built app with `npm run start`.
+
+## Ports
+
+You'll need to make sure access to these ports is properly set up before using it.
+
+The development server runs on port 3001.
+
+The PeerJS server port runs on 2083.
+
+The Express server port runs on port 8080 if in production mode (`npm run build` and `npm run start`).
+
+The socket to JC2MP runs on port 4002.
+
+To connect to your website, you can enter `<your server ip>:8080` to connect, or do some fancier configuration if you want to use a domain name (like I did for [panausurvival.com](https://panausurvival.com))

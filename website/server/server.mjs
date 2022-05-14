@@ -66,22 +66,11 @@ peerServer.on('disconnect', (client) => {
     }
 });
 
-// https://github.com/peers/peerjs-server
-
-// use api requests from client to get latest player data
-// https://stackoverflow.com/questions/71823930/can-i-send-some-metadata-while-answering-a-call-using-peerjs
-
-// import rateLimit from "express-rate-limit";
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import jcmp from './jcmp_users.mjs';
 import { UserConnect } from './voice_codes.mjs';
-
-// const apiLimiter = rateLimit({
-//     windowMs: 10 * 60, // 1 minute
-//     max: 300
-// });
 
 const app = express();
 app.use(cors());
